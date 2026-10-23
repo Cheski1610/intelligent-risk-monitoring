@@ -1,5 +1,9 @@
 # Intelligent Risk Monitoring Lab
 
+<p align="center">
+  <img src="images/Portada.png" width="600" alt="Portada">
+</p>
+
 Laboratorio educativo en español para explorar transacciones PaySim, generar señales explicables, observar cambios en indicadores y preparar investigaciones respaldadas por evidencia documental.
 
 > **Límite de uso:** PaySim y sus etiquetas son sintéticos. Una anomalía no es una probabilidad de fraude; una alerta solo prioriza una revisión. Ningún resultado confirma fraude ni sustituye la validación humana.
