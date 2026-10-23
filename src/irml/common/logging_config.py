@@ -1,0 +1,13 @@
+"""Central logging setup for local runs."""
+from __future__ import annotations
+
+import logging
+
+from irml.common.config import settings
+
+
+def configure_logging() -> None:
+    logging.basicConfig(
+        level=getattr(logging, settings.log_level, logging.INFO),
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )

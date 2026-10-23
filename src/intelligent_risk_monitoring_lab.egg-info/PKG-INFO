@@ -1,0 +1,78 @@
+Metadata-Version: 2.4
+Name: intelligent-risk-monitoring-lab
+Version: 0.1.0
+Summary: Laboratorio educativo para monitoreo inteligente de riesgos con PaySim
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: numpy>=2.0
+Requires-Dist: pandas>=2.2
+Requires-Dist: plotly>=5.24
+Requires-Dist: pydantic>=2.8
+Requires-Dist: python-dotenv>=1.0
+Requires-Dist: scikit-learn>=1.5
+Requires-Dist: streamlit>=1.40
+Provides-Extra: dev
+Requires-Dist: pytest>=8.3; extra == "dev"
+
+# Intelligent Risk Monitoring Lab
+
+Laboratorio educativo en español para recorrer el ciclo de monitoreo inteligente de riesgos: explorar transacciones, generar señales explicables, observar cambios temporales y preparar investigaciones basadas en evidencia.
+
+PaySim es sintético. Una anomalía o alerta no confirma fraude ni sustituye el juicio del auditor.
+
+## Herramientas
+
+- Detector de anomalías: reglas robustas y mezcla gaussiana (GMM) no supervisada.
+- Monitor de riesgo: indicadores por hora o día simulado, referencias y alertas de cambios.
+- Asistente de investigación: recuperación local de documentos educativos, citas y expediente preliminar. Ollama es opcional; hay modo determinista.
+
+## Datos
+
+Coloque el CSV original `PS_20174392719_1491204439457_log.csv` en la raíz, o configure `IRML_DATA_PATH`. No se modifica el archivo fuente. El perfil inicial está en `docs/data_profile.md`; la muestra local se genera con:
+
+```powershell
+.\.venv\Scripts\python.exe scripts/profile_paysim.py
+```
+
+El CSV y la muestra se excluyen de Git. La muestra de demostración tiene una semilla fija, conserva el orden original e incluye factores de expansión por paso.
+
+## Instalación y ejecución
+
+Requiere Python 3.11 o superior. Desde PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m streamlit run apps/home.py
+```
+
+También puede abrir cada herramienta por separado:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run apps/01_anomaly_detection.py
+.\.venv\Scripts\python.exe -m streamlit run apps/02_risk_monitoring.py
+.\.venv\Scripts\python.exe -m streamlit run apps/03_ai_audit_assistant.py
+```
+
+Copie `.env.example` a `.env` y ajuste `IRML_DATA_PATH` si el CSV está en otra ruta. Ollama está configurado para el contenedor Docker `ollama` y el modelo `gemma4:12b`; si el contenedor tiene otro nombre, cambie `OLLAMA_DOCKER_CONTAINER`. También puede usar el endpoint HTTP o desactivar la generación con `OLLAMA_MODE=http` o `OLLAMA_MODE=disabled`. No copie secretos en el repositorio. Las pantallas no descargan modelos ni entrenan automáticamente al abrir.
+
+Para ejecutar la suite desde el entorno del proyecto:
+
+```powershell
+.\.venv\Scripts\python.exe -m pytest
+```
+
+## Metodología y límites
+
+- GMM se ajusta con el periodo de referencia; el número de componentes se selecciona con BIC.
+- Escaladores y codificadores se ajustan solo con referencia. El periodo de prueba queda fuera de selección.
+- `isFraud` solo se usa en evaluación retrospectiva; `isFlaggedFraud` analiza una regla anterior.
+- Los saldos se reservan para diagnóstico separado. Los identificadores no son predictores numéricos.
+- Se muestran precision, recall, F1, PR-AUC, ROC-AUC complementaria y métricas de priorización; accuracy no es la métrica principal.
+- La aplicación usa datos sintéticos y no establece hechos de auditoría ni decisiones disciplinarias.
+
+Consulte `docs/methodology.md`, `docs/data_dictionary.md`, `docs/data_profile.md` y `PLAN_IMPLEMENTACION.md`.
+
+## Licencias y atribución
+
+PaySim se obtiene por separado desde su fuente Kaggle y no se redistribuye desde este repositorio. Revise las condiciones de uso aplicables antes de compartir código o datos. Las dependencias mantienen sus propias licencias.
